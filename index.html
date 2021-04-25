@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!-- vue -->
+<!-- <script src="https://unpkg.com/vue@next"></script>
+
+<h1> My first node web application server</h1>
+<script>
+Vue.createApp({
+    render() {
+      return Vue.h('div', {}, this.hi)
+    }
+  })
+</script> -->
+
+<!-- bootstrap -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="/socket.io/socket.io.js">
+
+</script>
+<div class="container">
+    <br></br>
+<div class="jumbotron">
+<h1 class="display-4">Hi This is Node Chat App</h1>
+<br></br>
+<input class="form-control" id="name" placeholder="Name">
+<br></br>
+<input class="form-control" id="message" placeholder="message">
+<br></br>
+<button id="send" class="btn btn-success">Submit</button>
+</div>
+
+<div id="messages"></div>
+</div>
+
+<script>
+    var socket=io();
+    $(()=>{
+        $("#send").click(()=>{
+    // console.log("working");
+    var message={name: $('#name').val(), message: $('#message').val()}
+    console.log(message)
+    postMessage(message)
+   // addMessages({ name: "Vaurn", message:"I am learning node js"})
+        })
+        getMessages();
+    });
+
+socket.on('message',addMessage);
+
+    function addMessage(message){
+$('#messages').append(`<h4>${message.name}</h4> <p> ${message.message}</p>`)
+    }
+
+    function postMessage(message){
+        $.post('http://localhost:3000/messages',message, (data)=>{
+console.log(data)
+        })
+    }
+
+    function getMessages(){
+        $.get('http://localhost:3000/messages', (data)=>{
+            
+            data.forEach(element => {
+                addMessage(element)
+                
+            })
+        })
+    }
+</script>
